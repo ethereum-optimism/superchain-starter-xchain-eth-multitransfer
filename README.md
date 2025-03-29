@@ -168,6 +168,17 @@ This contract is not production ready. For one, the contract does not consider t
 
 One unimplemented mitigation is to add a withdrawal flow for any failed recipients such that one recipient's failure to receive doesn't prevent the others
 
+## 🐛 Debugging
+
+Use the error selectors below to identify the cause of reverts.
+
+- For a complete list of error signatures from interoperability contracts, see [abi-signatures.md](https://github.com/ethereum-optimism/ecosystem/blob/main/packages/viem/docs/abi-signatures.md)
+- Examples:
+  - `TargetCallFailed()`: `0xeda86850`
+  - `MessageAlreadyRelayed`: `0x9ca9480b`
+  - `Unauthorized()`: `0x82b42900`
+ 
+ 
 ## 📚 More resources
 
 - Interop recipes / guides: https://docs.optimism.io/app-developers/tutorials/interop

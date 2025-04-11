@@ -14,7 +14,7 @@ import { useWriteContract, useBalance, useWaitForTransactionReceipt } from 'wagm
 import { supersimL2A, supersimL2B } from '@eth-optimism/viem/chains';
 import { privateKeyToAccount } from 'viem/accounts';
 import { Address, Chain, formatEther, parseEther } from 'viem';
-import { crossChainETHMultisendAbi } from '@/abi/crossChainETHMultisendAbi';
+import { crossChainETHMultitransferAbi } from '@/abi/crossChainETHMultitransferAbi';
 import { DirectionSelector } from '@/components/DirectionSelector';
 import { MultiRecipientInput } from '@/components/MultiRecipientInput';
 import { AmountInput } from '@/components/AmountInput';
@@ -37,7 +37,7 @@ const CONFIG = {
     '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'
   ),
   supportedChains: [supersimL2A, supersimL2B] as Chain[],
-  crossChainETHMultisendAddress: '0xb0a34527e0d4c8e42cf41b42b8a67fa7a61dd518',
+  crossChainETHMultitransferAddress: '0xd361ebb3aae643a74c247fb1e994d52158ca5af8',
 } as const;
 
 // Add this helper function near the top of the file, after CONFIG
@@ -112,8 +112,8 @@ const MultisendCard = ({
           onClick={() => {
             writeContract({
               account: CONFIG.devAccount,
-              abi: crossChainETHMultisendAbi,
-              address: CONFIG.crossChainETHMultisendAddress,
+              abi: crossChainETHMultitransferAbi,
+              address: CONFIG.crossChainETHMultitransferAddress,
               functionName: 'send',
               args: [
                 BigInt(direction.destination.id),

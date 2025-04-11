@@ -5,17 +5,17 @@ import {Test} from "forge-std/Test.sol";
 import {IL2ToL2CrossDomainMessenger} from "@interop-lib/interfaces/IL2ToL2CrossDomainMessenger.sol";
 import {PredeployAddresses} from "@interop-lib/libraries/PredeployAddresses.sol";
 import {ISuperchainETHBridge} from "@interop-lib/interfaces/ISuperchainETHBridge.sol";
-import {CrossChainETHMultisend} from "../src/CrossChainETHMultisend.sol";
+import {CrossChainETHMultitransfer} from "../src/CrossChainETHMultitransfer.sol";
 
-contract CrossChainETHMultisendTest is Test {
-    CrossChainETHMultisend public multisend;
+contract CrossChainETHMultitransferTest is Test {
+    CrossChainETHMultitransfer public multisend;
     address alice;
     address bob;
     address charlie;
     bytes32 constant MOCK_MSG_HASH = bytes32(uint256(1));
 
     function setUp() public {
-        multisend = new CrossChainETHMultisend();
+        multisend = new CrossChainETHMultitransfer();
         alice = vm.addr(1);
         bob = vm.addr(2);
         charlie = vm.addr(3);
@@ -26,9 +26,9 @@ contract CrossChainETHMultisendTest is Test {
         vm.chainId(902); // Current chain
 
         // Create sends array
-        CrossChainETHMultisend.Send[] memory sends = new CrossChainETHMultisend.Send[](2);
-        sends[0] = CrossChainETHMultisend.Send(bob, 1 ether);
-        sends[1] = CrossChainETHMultisend.Send(charlie, 2 ether);
+        CrossChainETHMultitransfer.Send[] memory sends = new CrossChainETHMultitransfer.Send[](2);
+        sends[0] = CrossChainETHMultitransfer.Send(bob, 1 ether);
+        sends[1] = CrossChainETHMultitransfer.Send(charlie, 2 ether);
 
         // Mock SuperchainETHBridge.sendETH call
         vm.mockCall(
@@ -44,7 +44,7 @@ contract CrossChainETHMultisendTest is Test {
                 IL2ToL2CrossDomainMessenger.sendMessage.selector,
                 destChainId,
                 address(multisend),
-                abi.encodeCall(CrossChainETHMultisend.relay, (MOCK_MSG_HASH, sends))
+                abi.encodeCall(CrossChainETHMultitransfer.relay, (MOCK_MSG_HASH, sends))
             ),
             abi.encode(bytes32(0))
         );
@@ -62,7 +62,7 @@ contract CrossChainETHMultisendTest is Test {
                 IL2ToL2CrossDomainMessenger.sendMessage.selector,
                 destChainId,
                 address(multisend),
-                abi.encodeCall(CrossChainETHMultisend.relay, (MOCK_MSG_HASH, sends))
+                abi.encodeCall(CrossChainETHMultitransfer.relay, (MOCK_MSG_HASH, sends))
             )
         );
 
@@ -73,9 +73,9 @@ contract CrossChainETHMultisendTest is Test {
     function test_send_incorrectValue_reverts() public {
         uint256 destChainId = 901;
 
-        CrossChainETHMultisend.Send[] memory sends = new CrossChainETHMultisend.Send[](2);
-        sends[0] = CrossChainETHMultisend.Send(bob, 1 ether);
-        sends[1] = CrossChainETHMultisend.Send(charlie, 2 ether);
+        CrossChainETHMultitransfer.Send[] memory sends = new CrossChainETHMultitransfer.Send[](2);
+        sends[0] = CrossChainETHMultitransfer.Send(bob, 1 ether);
+        sends[1] = CrossChainETHMultitransfer.Send(charlie, 2 ether);
 
         vm.expectRevert();
         // Send with incorrect value (2 ether instead of 3)
@@ -88,9 +88,9 @@ contract CrossChainETHMultisendTest is Test {
         // Setup contract with initial balances (as if the WETH contract has sent the ETH)
         vm.deal(address(multisend), 3 ether);
 
-        CrossChainETHMultisend.Send[] memory sends = new CrossChainETHMultisend.Send[](2);
-        sends[0] = CrossChainETHMultisend.Send(bob, 1 ether);
-        sends[1] = CrossChainETHMultisend.Send(charlie, 2 ether);
+        CrossChainETHMultitransfer.Send[] memory sends = new CrossChainETHMultitransfer.Send[](2);
+        sends[0] = CrossChainETHMultitransfer.Send(bob, 1 ether);
+        sends[1] = CrossChainETHMultitransfer.Send(charlie, 2 ether);
 
         // Mock cross-domain message validation
         _mockAndExpect(

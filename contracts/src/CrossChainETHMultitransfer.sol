@@ -8,7 +8,7 @@ import {ISuperchainETHBridge} from "@interop-lib/interfaces/ISuperchainETHBridge
 
 error IncorrectValue();
 
-contract CrossChainETHMultisend {
+contract CrossChainETHMultitransfer {
     struct Send {
         address to;
         uint256 amount;

@@ -1,4 +1,4 @@
-# Superchain Starter Kit: CrossChainETHMultisend
+# Superchain Starter Kit: CrossChainETHMultitransfer
 
 > Generated from [superchain-starter](https://github.com/ethereum-optimism/superchain-starter). See the original repository for a more detailed development guide.
 
@@ -8,7 +8,7 @@ Example Superchain app (contract + frontend) that uses interop to send ETH to mu
 
 ## 🔗 Contracts
 
-### [CrossChainETHMultisend.sol](./contracts/src/CrossChainETHMultisend.sol)
+### [CrossChainETHMultitransfer.sol](./contracts/src/CrossChainETHMultitransfer.sol)
 
 - Enables sending ETH to multiple recipients on a different chain
 - Uses `L2ToL2CrossDomainMessenger` for cross-chain message passing
@@ -23,7 +23,7 @@ Example Superchain app (contract + frontend) that uses interop to send ETH to mu
 This contract sends two cross-chain messages through the L2ToL2CrossDomainMessenger:
 
 1. (Message 1) to send ETH using SuperchainETHBridge from source to destination chain - triggered by SuperchainETHBridge#sendETH
-2. (Message 2) to disperse the received ETH to the recipients on the destination chain - triggered by CrossChainETHMultisend#send
+2. (Message 2) to disperse the received ETH to the recipients on the destination chain - triggered by CrossChainETHMultitransfer#send
 
 Message 2 depends on the success of Message 1, which is enforced by the `CrossDomainMessageLib.requireMessageSuccess(_sendWethMsgHash)` check in the relay function. This ensures that ETH bridging is completed before distribution occurs.
 
@@ -31,7 +31,7 @@ Message 2 depends on the success of Message 1, which is enforced by the `CrossDo
 
 ### 1. Contract deployed on same address on multiple chains
 
-The CrossChainETHMultisend contract is designed to be deployed at the same address on all chains. This allows the contract to:
+The CrossChainETHMultitransfer contract is designed to be deployed at the same address on all chains. This allows the contract to:
 
 - "Trust" that the send message was emitted as a side effect of a specific sequence of events
 - Process cross-chain messages from itself on other chains
@@ -57,7 +57,7 @@ The above `CrossDomainMessageLib.requireCrossDomainCallback()` performs two chec
 1. That the msg.sender is L2ToL2CrossDomainMessenger
 2. That the message being sent was originally emitted on the source chain by the same contract address
 
-Without the second check, it will be possible for ANY address on the source chain to send the message. This is undesirable because now there is no guarantee that the message was generated as a result of someone calling `CrossChainETHMultisend.send`
+Without the second check, it will be possible for ANY address on the source chain to send the message. This is undesirable because now there is no guarantee that the message was generated as a result of someone calling `CrossChainETHMultitransfer.send`
 
 ### 2. Returning msgHash from functions that emit cross domain messages
 
@@ -68,7 +68,7 @@ The contract captures the msgHash from SuperchainETHBridge's sendETH call and pa
 
 This is a pattern for composing cross domain messages. Functions that emit a cross domain message (such as `SuperchainETHBridge.sendEth`) should return the message hash so that other contracts can consume / depend on it.
 
-This "returning msgHash pattern" is also used in the `CrossChainETHMultisend.sol`, making it possible for a different contract to compose on this.
+This "returning msgHash pattern" is also used in the `CrossChainETHMultitransfer.sol`, making it possible for a different contract to compose on this.
 
 ```solidity
 function send(uint256 _destinationChainId, Send[] calldata _sends) public payable returns (bytes32)

@@ -1,4 +1,4 @@
-export const crossChainMultisendAbi = [
+export const crossChainETHMultisendAbi = [
   { type: 'receive', stateMutability: 'payable' },
   {
     type: 'function',
@@ -8,7 +8,7 @@ export const crossChainMultisendAbi = [
       {
         name: '_sends',
         type: 'tuple[]',
-        internalType: 'struct CrossChainMultisend.Send[]',
+        internalType: 'struct CrossChainETHMultisend.Send[]',
         components: [
           { name: 'to', type: 'address', internalType: 'address' },
           { name: 'amount', type: 'uint256', internalType: 'uint256' },
@@ -26,7 +26,7 @@ export const crossChainMultisendAbi = [
       {
         name: '_sends',
         type: 'tuple[]',
-        internalType: 'struct CrossChainMultisend.Send[]',
+        internalType: 'struct CrossChainETHMultisend.Send[]',
         components: [
           { name: 'to', type: 'address', internalType: 'address' },
           { name: 'amount', type: 'uint256', internalType: 'uint256' },

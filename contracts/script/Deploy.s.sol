@@ -6,7 +6,7 @@ import {Vm} from "forge-std/Vm.sol";
 import {ICreateX} from "createx/ICreateX.sol";
 
 import {DeployUtils} from "../libraries/DeployUtils.sol";
-import {CrossChainMultisend} from "../src/CrossChainMultisend.sol";
+import {CrossChainETHMultisend} from "../src/CrossChainETHMultisend.sol";
 
 // Example forge script for deploying as an alternative to sup: super-cli (https://github.com/ethereum-optimism/super-cli)
 contract Deploy is Script {
@@ -26,13 +26,13 @@ contract Deploy is Script {
 
             console.log("Deploying to RPC: ", rpcUrl);
             vm.createSelectFork(rpcUrl);
-            deployCrossChainMultisendContract();
+            deployCrossChainETHMultisendContract();
         }
     }
 
-    function deployCrossChainMultisendContract() public broadcast returns (address addr_) {
-        bytes memory initCode = abi.encodePacked(type(CrossChainMultisend).creationCode);
-        addr_ = DeployUtils.deployContract("CrossChainMultisend", _implSalt(), initCode);
+    function deployCrossChainETHMultisendContract() public broadcast returns (address addr_) {
+        bytes memory initCode = abi.encodePacked(type(CrossChainETHMultisend).creationCode);
+        addr_ = DeployUtils.deployContract("CrossChainETHMultisend", _implSalt(), initCode);
     }
 
     /// @notice The CREATE2 salt to be used when deploying a contract.

@@ -42,11 +42,11 @@ forge script script/Deploy.s.sol --rpc-url $RPC_URL --broadcast
 
 ### Cross-Chain Multisend Flow
 
-1. User calls `send(destinationChainId, sends[])` on `CrossChainMultisend` with ETH value
-2. Contract bridges ETH to destination chain using `SuperchainWETH.sendETH()`
+1. User calls `send(destinationChainId, sends[])` on `CrossChainETHMultisend` with ETH value
+2. Contract bridges ETH to destination chain using `SuperchainETHBridge.sendETH()`
 3. Contract sends relay message via `L2ToL2CrossDomainMessenger`
 4. On destination chain:
-   - Message is delivered to `CrossChainMultisend.relay()`
+   - Message is delivered to `CrossChainETHMultisend.relay()`
    - Contract verifies the ETH bridge message was successful
    - Contract distributes ETH to all specified recipients
 
